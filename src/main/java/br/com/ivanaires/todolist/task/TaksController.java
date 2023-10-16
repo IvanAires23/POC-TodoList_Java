@@ -54,6 +54,10 @@ public class TaksController {
     public ResponseEntity update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) {
 
         var task = this.taskRepository.findById(id).orElse(null);
+
+        if (task == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tarefa não encontrada");
+
         var userId = request.getAttribute("userId");
         if (!taskModel.getUserId().equals(userId)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("essa task pertence a outro usuario");
